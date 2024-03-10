@@ -1,0 +1,100 @@
+q: 21 :: Merge Two Sorted Lists:: Asked: Amazon, Microsoft, Facebook, Adobe, Oracle
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: 	Optional[ListNode]) -> Optional[ListNode]:
+    
+        # creating something to hang the newly merged empty list on, return empty lists through
+        dummy = ListNode()
+        # for iterating through the lists
+        tail = dummy
+
+        # loop until both lists have something in them
+        # if either list ends, loop ends at the point of shorter list, and 
+        # attaches longer list behind the rest
+        while list1 and list2:
+
+            # comparison checks for l1 and l2
+            if list1.val < list2.val:
+                # add compared node to end of last node of merged list
+                tail.next = list1
+                # advance list1 pointer to next node for future iteration
+                list1 = list1.next
+            else:
+                # add compared node to merged list
+                tail.next = list2
+                # advance list1 pointer to next node for future iteration
+                list2 = list2.next
+
+            # move tail one node forward by making it pooint to newly added end node
+            tail = tail.next
+
+        # if either list is empty, but the other list has elements in it 
+        # AFTER while loop completes, just add remainder of that list to end of merged list
+        if list1:
+            tail.next = list1
+        elif list2:
+            tail.next = list2
+
+        return dummy.next
+
+
+q: 143 ::  Reorder List :: Asked: Amazon, Microsoft, Adobe, Facebook, Bloomberg
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reorderList(self, head: Optional[ListNode]) -> None:
+        """
+        Do not return anything, modify head in-place instead.
+        """
+        # assign slow and fast pointer to find out middle element of linked list
+        #  if even, works out nicely
+        # if odd, slow will be at mid + 1 element, and given we are reversing the second 
+        # half of the linked list, having second list shorter works as last pointer of reversed
+        # list will be null
+        slow, fast = head, head.next
+        while fast and fast.next:
+            # slow increments by 1
+            slow = slow.next
+            # fast increments by 2 
+            fast = fast = fast.next.next
+        
+        # second is the node right next to slow, i.e., mid+1 
+        second = slow.next
+        # prev pointer is used to help hold previous element for connecting, while reversing
+        prev = slow.next = None
+
+        while second:
+            # goes to mid + 2th element so we have a element second can jump to
+            temp = second.next
+            # makes element pointed to by second, point to prev, reverse direction
+            second.next = prev
+            # makes prev increment by 1 from line 26, now prev point to curr element 
+            # (element  pointed to by second)
+            prev = second
+            # increment second by 1, to next element, pointed by temp
+            second = temp
+
+        # assigns first element of new list (0th) is pointed to by head
+        # changes second variable, now it points to Nth element, like prev
+        first, second = head, prev
+        while second:
+            # creating 2 temp variables to hold first elements of list 1 and list 2
+            # increment by 1 so they are placed pointing to next nodes for future iteration
+            temp1, temp2 = first.next, second.next
+            # Eg: first element from front connect to Nth element
+            first.next = second
+            # Eg: Nth elementconnects to node next to first element
+            second.next = temp1
+            # both go to next node
+            first, second = temp1, temp2
+
+
