@@ -1,3 +1,5 @@
+https://faculty.cs.niu.edu/~mcmahon/CS241/Notes/Data_Structures/binary_tree_traversals.html
+
 100. Sambe Binary Tree
 Level - Easy
 Companies - LinkedIn, Amazon, Google, Apple, Meta
@@ -27,3 +29,36 @@ class Solution:
             return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
         # Values are not equal, they are not identical
         return False
+
+
+98. Validate BST
+Level - Medium
+Companies:Amazon
+Bloomberg
+Facebook
+Microsoft 
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    # helper function 
+    def inorderchk(self, root, prev):
+        if root is not None:
+            if not self.inorderchk(root.left, prev):  # left
+                return False
+            if prev[0] is not None and root.val <= prev[0].val:  # should be increasing, not less
+                return False
+            prev[0] = root  # update prev with the current root
+            return self.inorderchk(root.right, prev)  # right
+        return True
+    # given
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        prev = [None]  # Use a list to make 'prev' mutable
+        return self.inorderchk(root, prev)
+
